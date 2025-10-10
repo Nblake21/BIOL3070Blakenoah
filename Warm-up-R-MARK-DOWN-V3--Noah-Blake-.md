@@ -107,7 +107,7 @@ arrows(duration$lo, bp, duration$hi, bp,
        angle=90, code=3, length=0.05, col="black", xpd=TRUE)
 ```
 
-<img src="Warm-up-R-MARK-DOWN-Noah-Blake-_files/figure-gfm/viremia-1.png" style="display: block; margin: auto auto auto 0;" />
+<img src="Warm-up-R-MARK-DOWN-V3--Noah-Blake-_files/figure-gfm/viremia-1.png" style="display: block; margin: auto auto auto 0;" />
 
 # STUDY QUESTION and HYPOTHESIS
 
@@ -236,7 +236,7 @@ barplot(height = counts1,
         xlim = xlim_use)
 ```
 
-<img src="Warm-up-R-MARK-DOWN-Noah-Blake-_files/figure-gfm/horiz-plot-1.png" style="display: block; margin: auto auto auto 0;" />
+<img src="Warm-up-R-MARK-DOWN-V3--Noah-Blake-_files/figure-gfm/horiz-plot-1.png" style="display: block; margin: auto auto auto 0;" />
 
 ``` r
 par(op)
