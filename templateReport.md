@@ -1,19 +1,13 @@
----
-title: "Final Project"
-author: "Noah Blake"
-date: "2025-10-28"
-output:
-  github_document:
-    toc: true
----
+Final Project
+================
+Noah Blake
+2025-10-28
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+- [R Markdown](#r-markdown)
 
 ## R Markdown
 
-```{r plot-state-data, echo=TRUE, message=FALSE, warning=FALSE, fig.height=10, fig.width=7}
+``` r
 # Load required libraries
 library(tidyverse)
 
@@ -43,6 +37,6 @@ ggplot(state_data, aes(x = reorder(State, Rate), y = Rate)) +
     axis.text.y = element_text(size = 10, margin = margin(r = 5)),
     plot.margin = margin(10, 15, 10, 15)
   )
-
-
 ```
+
+![](templateReport_files/figure-gfm/plot-state-data-1.png)<!-- -->
