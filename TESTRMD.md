@@ -65,7 +65,7 @@ ggplot(map_data_1, aes(x = long, y = lat, group = group, fill = region.y)) +
   theme_void()
 ```
 
-<img src="templateReport_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
+<img src="TESTRMD_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
 
 ``` r
 library(ggplot2)
@@ -78,7 +78,7 @@ ggplot(asthma_data, aes(x = region, y = prevalence)) +
   theme_minimal()
 ```
 
-<img src="templateReport_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
+<img src="TESTRMD_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
 
 ``` r
 library(ggplot2)
@@ -112,7 +112,7 @@ ggplot(map_data_2, aes(long, lat, group = group, fill = prevalence)) +
   )
 ```
 
-<img src="templateReport_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
+<img src="TESTRMD_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ggplot(asthma_data, aes(x = population, y = prevalence)) +
@@ -124,9 +124,9 @@ ggplot(asthma_data, aes(x = population, y = prevalence)) +
   theme_minimal()
 ```
 
-<img src="templateReport_files/figure-gfm/scatter plot-1.png" style="display: block; margin: auto;" />
+<img src="TESTRMD_files/figure-gfm/scatter plot-1.png" style="display: block; margin: auto;" />
 
-![](templateReport_files/figure-gfm/plot-state-data-1.png)<!-- -->
+![](TESTRMD_files/figure-gfm/plot-state-data-1.png)<!-- -->
 
 ``` r
 library(ggplot2)
@@ -138,7 +138,7 @@ ggplot(age, aes(x = category, y = value)) +
   labs(title = "Asthma Deaths By Age",x = "Age (Years)",y = "Asthma-Related Deaths Per Million")
 ```
 
-![](templateReport_files/figure-gfm/age%20and%20deaths-1.png)<!-- -->
+![](TESTRMD_files/figure-gfm/age%20and%20deaths-1.png)<!-- -->
 
 ``` r
 ### ANOVA: Asthma Prevalence by U.S. Region
@@ -163,7 +163,7 @@ summary(anova_model)
 plot(anova_model, which = 2)     # QQ plot
 ```
 
-![](templateReport_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](TESTRMD_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
 shapiro.test(residuals(anova_model))

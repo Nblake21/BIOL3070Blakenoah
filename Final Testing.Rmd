@@ -1,0 +1,273 @@
+---
+title: "Ashtma Prevelance in the United States"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Noah Blake 
+### BIOL 3070
+### 12-4-25
+
+## Abstract 
+This Project aims to dive deeper into the understanding of Asthma which is a condition which makes breathing restrictive and overall health struggles related to the respiratory system. We look at Data from the CDC and Asthma prevalence across the united states to see about what different factors may cause it to be higher or lower in different area. The locus of this project looks at the measure of population density and its effect which we hypothesis will show a positive correlation in the Rate of asthma. We concluded however that in only one region of the US (the Northeast) was this correlation positive and statisticaly significant with the rest being null. 
+
+## Background
+
+Asthma is a chronic respiratory condition characterized by airway constriction and inflammation, leading to breathing difficulties. Exposure to certain air pollutants—including ozone, nitrogen dioxide, sulfur dioxide, carbon monoxide, and methane[^1]—can trigger and worsen asthma symptoms. These pollutants interact with bodily tissues and can generate reactive oxygen species, powerful oxidizing agents that damage cells. This damage prompts an inflammatory response, further tightening the airways and making breathing more difficult.^3
+
+In the United States, emissions of these pollutants vary regionally, contributing to differences in asthma rates across the country. The following map illustrates the geographic distribution of asthma prevalence in relation to these airborne pollutants.
+
+
+## Question Framing
+Study question : does population density have an effect on asthma rates 
+Hypothesis : we Hypothesis that in areas of High population there will be a higher rate of Asthma due to pollution effects 
+
+
+
+
+
+```{r setup and data, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+asthma_data <- data.frame(
+  state = c("Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut",
+            "Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois",
+            "Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts",
+            "Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada",
+            "New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota",
+            "Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina",
+            "South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington",
+            "West Virginia","Wisconsin","Wyoming"),
+  
+  state_abrv = c("AL","AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"),
+  
+  number = c(378702,58742,555997,243032,2629546,500090,356651,
+             78980,60410,1646583,802783,103228,161970,856488,
+             574447,238689,237705,377365,351940,146031,499134,633126,
+             935666,434473,211055,497216,102617,121412,251193,
+             148330,644536,171212,1611027,764909,61944,
+             1042354,373879,389831,1033741,117252,368883,
+             56630,636322,1760654,266105,68112,671051,667228,
+             181395,503318,46973),
+  
+  prevalence_raw = c("9.6 (0.59)","10.7 (0.58)","9.7 (0.49)","10.5 (0.57)","8.7 (0.39)","10.8 (0.43)","12.4 (0.51)",
+                     "9.9 (0.64)","11.1 (0.77)","9.3 (0.53)","9.6 (0.48)","9.1 (0.45)","11.1 (0.51)","8.7 (0.58)",
+                     "11.0 (0.39)","9.7 (0.42)","10.7 (0.41)","10.8 (0.68)","10.0 (0.55)","13.1 (0.52)","10.4 (0.38)","11.3 (0.43)",
+                     "11.9 (0.44)","9.9 (0.32)","9.4 (0.63)","10.4 (0.49)","11.7 (0.51)","8.1 (0.46)","10.1 (0.79)",
+                     "13.1 (0.64)","8.9 (0.43)","10.4 (0.62)","10.3 (0.34)","9.2 (0.62)","10.4 (0.60)",
+                     "11.4 (0.38)","12.3 (0.54)","11.5 (0.51)","10.1 (0.67)","13.3 (0.64)","9.0 (0.40)",
+                     "8.3 (0.75)","11.7 (0.61)","7.9 (0.37)","11.0 (0.43)","12.9 (0.53)","9.9 (0.46)","10.9 (0.26)",
+                     "12.9 (0.61)","10.9 (0.42)","10.5 (0.65)"), 
+  
+  population = c(5108468, 733406, 7431344, 3067732, 38965193, 5877610, 3617176, 1031890, 678972,
+  22610726, 11029227, 1435138, 1964726, 12549689, 6862199, 3207004, 2940546,
+  4526154, 4573749, 1395722, 6180253, 7001399, 10037261, 5737915, 2939690,
+  6196156, 1132812, 1978379, 3194176, 1402054, 9290842, 2114371, 19571216,
+  10835491, 783926, 11785935, 4053824, 4233358, 12961683, 1095962, 5373555,
+  919318, 7126489, 30503301, 3417735, 647464, 8715698, 7812880, 1770071,
+  5910955, 584057),
+  
+   pop_density_sqmile = c(101,1.3,65,59,250,57,747,529,11131,422,192,223,24,226,192,57,36,115,106,45,637,898,178,72,63,90,7.8,26,29,157,1263,17,415,223,11,274,59,44,290,1060,179,12,173,117,42,70,221,118,74,109,6)
+)
+
+library(dplyr)
+library(stringr)
+
+asthma_data <- asthma_data %>%
+  mutate(
+    prevalence = as.numeric(str_extract(prevalence_raw, "^[0-9.]+")),
+    SE = as.numeric(str_extract(prevalence_raw, "(?<=\\().+?(?=\\))")),
+    state_lower = tolower(state),
+    region = state.region[match(state, state.name)]
+  )
+
+asthma_data <- na.omit(asthma_data)
+
+```
+
+
+
+
+
+```{r box plot, include=TRUE, eval=TRUE, warning=FALSE, fig.align='center', fig.width=4.75, fig.height=7}
+
+library(ggplot2)
+
+ggplot(asthma_data, aes(x = region, y = prevalence, fill = region)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("salmon", "chartreuse3", "skyblue", "violet")) +
+  labs(title = "Asthma Prevalence by U.S. Region",
+       x = "Region",
+       y = "Asthma Prevalence (%)") +
+       theme_minimal()
+
+
+```
+Figure 1. Bar plot showing the median Asthma prevalence in each US region along with outliars with the south with the lowest prevelance and the Northeast at the highest. 
+
+```{r population density boxplot, include=TRUE, eval=TRUE, warning=FALSE, fig.align='center', fig.width=4.75, fig.height=7}
+
+library(ggplot2)
+
+ggplot(asthma_data, aes(x = region, y = pop_density_sqmile, fill = region)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("salmon", "green", "skyblue", "plum")) +
+  labs(title = "Population Density by U.S. Region",
+       x = "Region",
+       y = "Population Density (per sq. mile)") +
+  theme_minimal()
+
+
+```
+Figure 2. Bar plot showing the asthma prevalence by US region
+
+
+```{r region map, eval=TRUE, fig.align='center', fig.height=3, fig.width=6, warning=FALSE, include=TRUE}
+library(maps)
+library(ggmap)
+# U.S. states map data
+states_map <- map_data("state")
+
+# Put the states into regions in a dataframe
+state_regions <- data.frame(
+  state = tolower(state.name),
+  region = state.region
+)
+
+# Merge map data with region info
+map_data_1 <- states_map %>%
+  left_join(state_regions, by = c("region" = "state"))
+
+# Plot
+ggplot(map_data_1, aes(x = long, y = lat, group = group, fill = region.y)) +
+  geom_polygon(color = "white") +
+  coord_fixed(1.3) +
+  labs(title = "Four U.S. Census Regions",
+       fill = "Region") +
+  theme_void()
+```
+Figure 3. Map showing Regions of the US referenced in previous analysis.
+
+```{r prevalence by state, include=TRUE, eval=TRUE, warning=FALSE, fig.align='center', fig.width=6, fig.height=3}
+
+library(ggplot2)
+library(maps)
+library(dplyr)
+
+# Map data
+states_map <- map_data("state")
+
+# Merge map data with asthma data
+map_data_2 <- states_map %>%
+  left_join(asthma_data, by = c("region" = "state_lower"))
+
+ggplot(map_data_2, aes(long, lat, group = group, fill = prevalence)) +
+  geom_polygon(color = "gray90", size = 0.3) +  # state borders
+  geom_polygon(aes(fill = prevalence), color = "white") +
+  coord_fixed(1.3) +
+ scale_fill_gradientn(
+  name = "Asthma Prevalence (%)",
+  colors = c("yellow2", "orange", "red", "red4")
+) +
+  labs(
+    title = "Asthma Prevalence by U.S. State",
+    subtitle = "Higher prevalence shown in darker colors"
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12)
+  )
+
+```
+Figure 4. Map showing Asthma prevelence on a state by state basis with high being darker and lower being lighter.
+
+```{r first analysis ANOVA for state population density and asthma prevalence, eval=FALSE}
+
+# load necessary libraries
+
+library("car")
+library("lme4")
+
+# create a linear model for population density per square mile and asthma prevalence by state
+
+m1 <- lm(prevalence ~ pop_density_sqmile, data=asthma_data)
+
+# perform statistical test
+
+Anova(m1)
+summary(m1)
+
+```
+
+```{r second analysis ANOVA by region and pairwise comparison}
+
+# load necessary libraries
+library(car)
+library(emmeans)
+
+# ensure region is a factor
+asthma_data$region <- factor(asthma_data$region)
+
+# linear model
+m2 <- lm(prevalence ~ region, data = asthma_data)
+
+# perform ANOVA
+Anova(m2)
+summary(m2)
+
+# pairwise comparison (Tukey-like, adjusted)
+pairs(emmeans(m2, "region"))
+
+```
+
+
+
+
+
+```{r third analysis ANOVA for region population density and asthma prevalence}
+
+library(car)
+
+# run linear model with correct variable names + dataset
+r1 <- lm(prevalence ~ pop_density_sqmile, data = asthma_data)
+
+# ANOVA table
+Anova(r1)
+
+# regression summary
+summary(r1)
+
+
+```
+## Analysis 
+
+### 1 
+Asthma prevalence by region (Figure1) This chart shows us the Median Asthma prevalence with the Highest being the Northeast and the lowest being the south. This helps us to answer our hypothesis because it shows us where the region with a high rate of asthma is so we can test it to see if it correlates with high population density. 
+
+### 2 
+Population density of the US (Figure2) This chart shows us the Median population density of the different US regions as outlined in (figure3) with the Northeast being the highest and the west being the lowest. This helps us answer our hypothesis because it shows what we were looking for at least in the northeast region that there is a high population density which fits with the higher rate of asthma. 
+
+### 3 
+Map of the United states with state by state rates of asthma. This map was designed to try and help us to see a trend in the regions and the rates of asthma in each state and how they might correlate with the region which were helpful for understanding the out liar that was New England. This helped to solidify the points that we found in the last two analysis about the corelation we are looking for in the asthma rates and population density. 
+
+### 4 
+Three Anova tests with Tukey-adjusted pairwise function were run to test for the significance of the data that we found. Most all of these P values which we found were high and showed that these correlations were not statistically significant other than in the northeast which showed that asthma prevalence was significantly higher from the other regions with comparison p-values of 0.00419, 0.00558, and  0.02671 for the South, North Central, and West regions respectively. This statistical analysis showed significance in the Northeast showing that the effects are not likely to be from random chance making them significant in our project. howwver these tests did show that in other ares the p values were not under the needed threshold of significance causing us to nullify drawing any conclusions from them in our hypothesis. 
+
+# Conclusion
+
+We overall were not able to conclusively say that the population density is a direct factor in the Asthma rates in a givin area due to these high P values other than in the Northeast which had the highest rate of asthma and the highest population density of 549 per sq mile.
+
+# Discussion 
+With this data and conclusion we look forward to a new identifies of these high asthma rates in diffrent regions. due to the limitations on the data that we looked at being only from one year (2024) and not any more specifics we aim in the future to collect and find better data which will show up diffrent factors like Age, Sex or Race to answer this question. 
+
+## Refrences 
+
+1. OpenAI. (2025). ChatGPT (Version 5.1) [Large language model]. https://chat.openai.com/ (used for creation of box plots and troubleshooting)
+2.Centers for Disease Control and Prevention. (2024, November 21). Most recent asthma data. U.S. Department of Health and Human Services. https://www.cdc.gov/asthma-data/about/most-recent-asthma-data.html
+3. https://aafa.org/asthma/asthma-triggers-causes/air-pollution-smog-asthma/
+

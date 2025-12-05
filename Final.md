@@ -4,15 +4,21 @@ Noah Blake
 2025-10-28
 
 - [R Markdown](#r-markdown)
+- [Abstract](#abstract)
 - [Background](#background)
 - [Analysis](#analysis)
   - [1 Prevelance by Region](#1-prevelance-by-region)
+  - [2 US Population density by
+    region](#2-us-population-density-by-region)
+  - [3 Asthma Prevelance by US State](#3-asthma-prevelance-by-us-state)
 
 ``` r
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## R Markdown
+
+## Abstract
 
 ## Background
 
@@ -31,11 +37,25 @@ cause high rates of asthma to appear. The map below shows the prevalence
 of asthma across different regions.
 
 ``` r
+library(ggplot2)
+
+ggplot(asthma_data, aes(x = region, y = prevalence)) +
+  geom_boxplot() +
+  labs(title = "Asthma Prevalence by U.S. Region",
+       x = "Region",
+       y = "Asthma Prevalence (%)") +
+  theme_minimal()
+```
+
+<img src="Final_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
+Figure 1. Bar plot showing the median Asthma prevalence in each US
+region along with outliars with the south with the lowest prevelance and
+the Northeast at the highest.
+
+``` r
 library(maps)
 library(ggmap)
 ```
-
-    ## Loading required package: ggplot2
 
     ## ℹ Google's Terms of Service: <https://mapsplatform.google.com>
     ##   Stadia Maps' Terms of Service: <https://stadiamaps.com/terms-of-service>
@@ -65,20 +85,9 @@ ggplot(map_data_1, aes(x = long, y = lat, group = group, fill = region.y)) +
   theme_void()
 ```
 
-<img src="templateReport_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
-
-``` r
-library(ggplot2)
-
-ggplot(asthma_data, aes(x = region, y = prevalence)) +
-  geom_boxplot() +
-  labs(title = "Asthma Prevalence by U.S. Region",
-       x = "Region",
-       y = "Asthma Prevalence (%)") +
-  theme_minimal()
-```
-
-<img src="templateReport_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
+<img src="Final_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
+Figure 3. This region map helps to visualize the regions shown in
+previous box plots.
 
 ``` r
 library(ggplot2)
@@ -112,33 +121,10 @@ ggplot(map_data_2, aes(long, lat, group = group, fill = prevalence)) +
   )
 ```
 
-<img src="templateReport_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
+<img src="Final_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
 
-``` r
-ggplot(asthma_data, aes(x = population, y = prevalence)) +
-  geom_point(aes(color=region)) +
-  geom_text(aes(label = state_abrv), vjust = -0.5, size = 3)+
-  labs(title = "Number of Individuals With Asthma vs. Asthma Prevalence by State",
-       x = "Population",
-       y = "Asthma Prevalence (%)") +
-  theme_minimal()
-```
-
-<img src="templateReport_files/figure-gfm/scatter plot-1.png" style="display: block; margin: auto;" />
-
-![](templateReport_files/figure-gfm/plot-state-data-1.png)<!-- -->
-
-``` r
-library(ggplot2)
-
-age <- data.frame(category = c(" 0-4", " 5-11", "12-17", "18-24", "25-34", "35-64", "65+"), value = c(1.4, 2.4, 2.0, 3.8, 6.4, 11.5, 27.1))
-
-ggplot(age, aes(x = category, y = value)) +
-  geom_bar(stat = "identity", fill = "darkred") + # stat="identity" uses y-values directly
-  labs(title = "Asthma Deaths By Age",x = "Age (Years)",y = "Asthma-Related Deaths Per Million")
-```
-
-![](templateReport_files/figure-gfm/age%20and%20deaths-1.png)<!-- -->
+Figure 4. This Map shows the coded Asthma prevalence in each state with
+the darker being more prevalent and the lighter being less prevalent.
 
 ``` r
 ### ANOVA: Asthma Prevalence by U.S. Region
@@ -163,7 +149,7 @@ summary(anova_model)
 plot(anova_model, which = 2)     # QQ plot
 ```
 
-![](templateReport_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](Final_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
 shapiro.test(residuals(anova_model))
@@ -184,10 +170,6 @@ library(car)
 
     ## 
     ## Attaching package: 'car'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     some
 
     ## The following object is masked from 'package:dplyr':
     ## 
@@ -230,4 +212,20 @@ library(ggplot2)
 
 ### 1 Prevelance by Region
 
-Based off of our State prevelance plot and the
+We see first in this plot (Figuire 1.) That the prevalence of Asthma
+varies across different regions of the united states. It is the highest
+in the Northeast and lowest in the south and in between for the west and
+North central. We see the highest variability in the northeast region
+and the lowest in the west.
+
+### 2 US Population density by region
+
+This Chart showing us the population density breakdown by region (Figure
+2.) Helps us to better understand (Figure 1) we see that there is a
+fairly similar trend in the northeast both with its higher population
+density along with the varibility which is also the highest. We see this
+similarly in the west as well which has by far the lowest population
+density and while it does not show the lowest levels of asthma it does
+show the lowest level of asthma variability.
+
+### 3 Asthma Prevelance by US State
