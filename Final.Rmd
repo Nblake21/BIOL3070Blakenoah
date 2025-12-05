@@ -1,7 +1,13 @@
 ---
-title: "Ashtma Prevelance in the United States"
+title: "Asthma Prevelence in the US"
 author: "Noah Blake"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
 ---
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

@@ -1,56 +1,86 @@
-Final Project
+Asthma Prevelence in the US
 ================
 Noah Blake
-2025-10-28
+2025-12-05
 
-- [R Markdown](#r-markdown)
 - [Abstract](#abstract)
 - [Background](#background)
+- [Question Framing](#question-framing)
 - [Analysis](#analysis)
-  - [1 Prevelance by Region](#1-prevelance-by-region)
-  - [2 US Population density by
-    region](#2-us-population-density-by-region)
-  - [3 Asthma Prevelance by US State](#3-asthma-prevelance-by-us-state)
-
-``` r
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
+  - [1](#1)
+  - [2](#2)
+  - [3](#3)
+  - [4](#4)
+- [Conclusion](#conclusion)
+- [Discussion](#discussion)
+  - [Refrences](#refrences)
 
 ## Abstract
 
+This Project aims to dive deeper into the understanding of Asthma which
+is a condition which makes breathing restrictive and overall health
+struggles related to the respiratory system. We look at Data from the
+CDC and Asthma prevalence across the united states to see about what
+different factors may cause it to be higher or lower in different area.
+The locus of this project looks at the measure of population density and
+its effect which we hypothesis will show a positive correlation in the
+Rate of asthma. We concluded however that in only one region of the US
+(the Northeast) was this correlation positive and statisticaly
+significant with the rest being null.
+
 ## Background
 
-Asthma is a chronic condition that causes airways to tighten up and
-makes it harder to breathe. There are many pollutants that can be found
-in the air, which contribute to this Asthma reaction. These include
-Ozone, Nitrogen Dioxide, Sulfur Dioxide, Carbon Monoxide, and
-Methane\[^1\]. These species react with cells in the body and break down
-into reactive oxygen species, which are powerful oxidizers that damage
-cellular tissue. This causes an inflammatory response, which restricts
-the airways.
+Asthma is a chronic respiratory condition characterized by airway
+constriction and inflammation, leading to breathing difficulties.
+Exposure to certain air pollutants—including ozone, nitrogen dioxide,
+sulfur dioxide, carbon monoxide, and methane\[^1\]—can trigger and
+worsen asthma symptoms. These pollutants interact with bodily tissues
+and can generate reactive oxygen species, powerful oxidizing agents that
+damage cells. This damage prompts an inflammatory response, further
+tightening the airways and making breathing more difficult.^3
 
-In the United States, there are many of these pollutants that are
-released in different areas of the country as show below , which can
-cause high rates of asthma to appear. The map below shows the prevalence
-of asthma across different regions.
+In the United States, emissions of these pollutants vary regionally,
+contributing to differences in asthma rates across the country. The
+following map illustrates the geographic distribution of asthma
+prevalence in relation to these airborne pollutants.
+
+## Question Framing
+
+Study question : does population density have an effect on asthma rates
+Hypothesis : we Hypothesis that in areas of High population there will
+be a higher rate of Asthma due to pollution effects
 
 ``` r
 library(ggplot2)
 
-ggplot(asthma_data, aes(x = region, y = prevalence)) +
+ggplot(asthma_data, aes(x = region, y = prevalence, fill = region)) +
   geom_boxplot() +
+  scale_fill_manual(values = c("salmon", "chartreuse3", "skyblue", "violet")) +
   labs(title = "Asthma Prevalence by U.S. Region",
        x = "Region",
        y = "Asthma Prevalence (%)") +
-  theme_minimal()
+       theme_minimal()
 ```
 
 <img src="Final_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
 Figure 1. Bar plot showing the median Asthma prevalence in each US
 region along with outliars with the south with the lowest prevelance and
 the Northeast at the highest.
+
+``` r
+library(ggplot2)
+
+ggplot(asthma_data, aes(x = region, y = pop_density_sqmile, fill = region)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("salmon", "green", "skyblue", "plum")) +
+  labs(title = "Population Density by U.S. Region",
+       x = "Region",
+       y = "Population Density (per sq. mile)") +
+  theme_minimal()
+```
+
+<img src="Final_files/figure-gfm/population density boxplot-1.png" style="display: block; margin: auto;" />
+Figure 2. Bar plot showing the asthma prevalence by US region
 
 ``` r
 library(maps)
@@ -86,8 +116,7 @@ ggplot(map_data_1, aes(x = long, y = lat, group = group, fill = region.y)) +
 ```
 
 <img src="Final_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
-Figure 3. This region map helps to visualize the regions shown in
-previous box plots.
+Figure 3. Map showing Regions of the US referenced in previous analysis.
 
 ``` r
 library(ggplot2)
@@ -122,47 +151,27 @@ ggplot(map_data_2, aes(long, lat, group = group, fill = prevalence)) +
 ```
 
 <img src="Final_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
-
-Figure 4. This Map shows the coded Asthma prevalence in each state with
-the darker being more prevalent and the lighter being less prevalent.
+Figure 4. Map showing Asthma prevelence on a state by state basis with
+high being darker and lower being lighter.
 
 ``` r
-### ANOVA: Asthma Prevalence by U.S. Region
+# load necessary libraries
 
-# Run one-way ANOVA
-anova_model <- aov(prevalence ~ region, data = asthma_data)
+library("car")
+library("lme4")
 
-# Show ANOVA table
-summary(anova_model)
+# create a linear model for population density per square mile and asthma prevalence by state
+
+m1 <- lm(prevalence ~ pop_density_sqmile, data=asthma_data)
+
+# perform statistical test
+
+Anova(m1)
+summary(m1)
 ```
 
-    ##             Df Sum Sq Mean Sq F value Pr(>F)  
-    ## region       3  16.93   5.643    3.65 0.0192 *
-    ## Residuals   46  71.11   1.546                 
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
 ``` r
-# ---- Assumption Checks ----
-
-# Normality of residuals
-plot(anova_model, which = 2)     # QQ plot
-```
-
-![](Final_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
-
-``` r
-shapiro.test(residuals(anova_model))
-```
-
-    ## 
-    ##  Shapiro-Wilk normality test
-    ## 
-    ## data:  residuals(anova_model)
-    ## W = 0.99321, p-value = 0.9926
-
-``` r
-# Homogeneity of variance
+# load necessary libraries
 library(car)
 ```
 
@@ -176,56 +185,180 @@ library(car)
     ##     recode
 
 ``` r
-leveneTest(prevalence ~ region, data = asthma_data)
+library(emmeans)
 ```
 
-    ## Levene's Test for Homogeneity of Variance (center = median)
-    ##       Df F value Pr(>F)
-    ## group  3  1.0629 0.3741
-    ##       46
+    ## Welcome to emmeans.
+    ## Caution: You lose important information if you filter this package's results.
+    ## See '? untidy'
 
 ``` r
-# ---- Post-hoc Test ----
-TukeyHSD(anova_model)
+# ensure region is a factor
+asthma_data$region <- factor(asthma_data$region)
+
+# linear model
+m2 <- lm(prevalence ~ region, data = asthma_data)
+
+# perform ANOVA
+Anova(m2)
 ```
 
-    ##   Tukey multiple comparisons of means
-    ##     95% family-wise confidence level
+    ## Anova Table (Type II tests)
     ## 
-    ## Fit: aov(formula = prevalence ~ region, data = asthma_data)
-    ## 
-    ## $region
-    ##                                diff        lwr        upr     p adj
-    ## South-Northeast         -1.56111111 -2.9419693 -0.1802529 0.0210683
-    ## North Central-Northeast -1.59444444 -3.0558074 -0.1330815 0.0275897
-    ## West-Northeast          -1.23418803 -2.6712607  0.2028847 0.1154630
-    ## North Central-South     -0.03333333 -1.2989108  1.2322441 0.9998740
-    ## West-South               0.32692308 -0.9105269  1.5643731 0.8949090
-    ## West-North Central       0.36025641 -0.9664292  1.6869421 0.8870876
+    ## Response: prevalence
+    ##           Sum Sq Df F value Pr(>F)  
+    ## region    16.928  3  3.6503 0.0192 *
+    ## Residuals 71.109 46                 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-# ---- Visualization ----
-library(ggplot2)
+summary(m2)
 ```
+
+    ## 
+    ## Call:
+    ## lm(formula = prevalence ~ region, data = asthma_data)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -2.8111 -0.7702  0.1231  0.7597  2.7500 
+    ## 
+    ## Coefficients:
+    ##                     Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)          11.7111     0.4144  28.258  < 2e-16 ***
+    ## regionSouth          -1.5611     0.5180  -3.013  0.00419 ** 
+    ## regionNorth Central  -1.5944     0.5483  -2.908  0.00558 ** 
+    ## regionWest           -1.2342     0.5391  -2.289  0.02671 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 1.243 on 46 degrees of freedom
+    ## Multiple R-squared:  0.1923, Adjusted R-squared:  0.1396 
+    ## F-statistic:  3.65 on 3 and 46 DF,  p-value: 0.0192
+
+``` r
+# pairwise comparison (Tukey-like, adjusted)
+pairs(emmeans(m2, "region"))
+```
+
+    ##  contrast                  estimate    SE df t.ratio p.value
+    ##  Northeast - South           1.5611 0.518 46   3.013  0.0211
+    ##  Northeast - North Central   1.5944 0.548 46   2.908  0.0276
+    ##  Northeast - West            1.2342 0.539 46   2.289  0.1155
+    ##  South - North Central       0.0333 0.475 46   0.070  0.9999
+    ##  South - West               -0.3269 0.464 46  -0.704  0.8949
+    ##  North Central - West       -0.3603 0.498 46  -0.724  0.8871
+    ## 
+    ## P value adjustment: tukey method for comparing a family of 4 estimates
+
+``` r
+library(car)
+
+# run linear model with correct variable names + dataset
+r1 <- lm(prevalence ~ pop_density_sqmile, data = asthma_data)
+
+# ANOVA table
+Anova(r1)
+```
+
+    ## Anova Table (Type II tests)
+    ## 
+    ## Response: prevalence
+    ##                    Sum Sq Df F value Pr(>F)
+    ## pop_density_sqmile  0.343  1  0.1877 0.6668
+    ## Residuals          87.694 48
+
+``` r
+# regression summary
+summary(r1)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = prevalence ~ pop_density_sqmile, data = asthma_data)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -2.5804 -0.8478 -0.0491  0.6314  2.6415 
+    ## 
+    ## Coefficients:
+    ##                     Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)        1.044e+01  2.404e-01  43.446   <2e-16 ***
+    ## pop_density_sqmile 3.042e-04  7.022e-04   0.433    0.667    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 1.352 on 48 degrees of freedom
+    ## Multiple R-squared:  0.003894,   Adjusted R-squared:  -0.01686 
+    ## F-statistic: 0.1877 on 1 and 48 DF,  p-value: 0.6668
 
 ## Analysis
 
-### 1 Prevelance by Region
+### 1
 
-We see first in this plot (Figuire 1.) That the prevalence of Asthma
-varies across different regions of the united states. It is the highest
-in the Northeast and lowest in the south and in between for the west and
-North central. We see the highest variability in the northeast region
-and the lowest in the west.
+Asthma prevalence by region (Figure1) This chart shows us the Median
+Asthma prevalence with the Highest being the Northeast and the lowest
+being the south. This helps us to answer our hypothesis because it shows
+us where the region with a high rate of asthma is so we can test it to
+see if it correlates with high population density.
 
-### 2 US Population density by region
+### 2
 
-This Chart showing us the population density breakdown by region (Figure
-2.) Helps us to better understand (Figure 1) we see that there is a
-fairly similar trend in the northeast both with its higher population
-density along with the varibility which is also the highest. We see this
-similarly in the west as well which has by far the lowest population
-density and while it does not show the lowest levels of asthma it does
-show the lowest level of asthma variability.
+Population density of the US (Figure2) This chart shows us the Median
+population density of the different US regions as outlined in (figure3)
+with the Northeast being the highest and the west being the lowest. This
+helps us answer our hypothesis because it shows what we were looking for
+at least in the northeast region that there is a high population density
+which fits with the higher rate of asthma.
 
-### 3 Asthma Prevelance by US State
+### 3
+
+Map of the United states with state by state rates of asthma. This map
+was designed to try and help us to see a trend in the regions and the
+rates of asthma in each state and how they might correlate with the
+region which were helpful for understanding the out liar that was New
+England. This helped to solidify the points that we found in the last
+two analysis about the corelation we are looking for in the asthma rates
+and population density.
+
+### 4
+
+Three Anova tests with Tukey-adjusted pairwise function were run to test
+for the significance of the data that we found. Most all of these P
+values which we found were high and showed that these correlations were
+not statistically significant other than in the northeast which showed
+that asthma prevalence was significantly higher from the other regions
+with comparison p-values of 0.00419, 0.00558, and 0.02671 for the South,
+North Central, and West regions respectively. This statistical analysis
+showed significance in the Northeast showing that the effects are not
+likely to be from random chance making them significant in our project.
+howwver these tests did show that in other ares the p values were not
+under the needed threshold of significance causing us to nullify drawing
+any conclusions from them in our hypothesis.
+
+# Conclusion
+
+We overall were not able to conclusively say that the population density
+is a direct factor in the Asthma rates in a givin area due to these high
+P values other than in the Northeast which had the highest rate of
+asthma and the highest population density of 549 per sq mile.
+
+# Discussion
+
+With this data and conclusion we look forward to a new identifies of
+these high asthma rates in different regions. due to the limitations on
+the data that we looked at being only from one year (2024) and not any
+more specifics we aim in the future to collect and find better data
+which will show up diffrent factors like Age, Sex or Race to answer this
+question.
+
+## Refrences
+
+1.  OpenAI. (2025). ChatGPT (Version 5.1) \[Large language model\].
+    <https://chat.openai.com/> (used for creation of box plots and
+    troubleshooting) 2.Centers for Disease Control and Prevention.
+    (2024, November 21). Most recent asthma data. U.S. Department of
+    Health and Human Services.
+    <https://www.cdc.gov/asthma-data/about/most-recent-asthma-data.html>
+2.  <https://aafa.org/asthma/asthma-triggers-causes/air-pollution-smog-asthma/>
