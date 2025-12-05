@@ -1,5 +1,6 @@
 ---
 title: "Ashtma Prevelance in the United States"
+author: "Noah Blake"
 ---
 
 ```{r setup, include=FALSE}
@@ -7,9 +8,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-### Noah Blake 
-### BIOL 3070
-### 12-4-25
+ 
+
+
 
 ## Abstract 
 This Project aims to dive deeper into the understanding of Asthma which is a condition which makes breathing restrictive and overall health struggles related to the respiratory system. We look at Data from the CDC and Asthma prevalence across the united states to see about what different factors may cause it to be higher or lower in different area. The locus of this project looks at the measure of population density and its effect which we hypothesis will show a positive correlation in the Rate of asthma. We concluded however that in only one region of the US (the Northeast) was this correlation positive and statisticaly significant with the rest being null. 
