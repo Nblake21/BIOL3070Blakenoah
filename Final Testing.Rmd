@@ -1,22 +1,29 @@
 ---
-title: "Ashtma Prevelance in the United States"
+title: "Asthma Prevelence in the US"
+author: "Noah Blake"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
 ---
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-### Noah Blake 
-### BIOL 3070
-### 12-4-25
+ 
+
+
 
 ## Abstract 
 This Project aims to dive deeper into the understanding of Asthma which is a condition which makes breathing restrictive and overall health struggles related to the respiratory system. We look at Data from the CDC and Asthma prevalence across the united states to see about what different factors may cause it to be higher or lower in different area. The locus of this project looks at the measure of population density and its effect which we hypothesis will show a positive correlation in the Rate of asthma. We concluded however that in only one region of the US (the Northeast) was this correlation positive and statisticaly significant with the rest being null. 
 
 ## Background
 
-Asthma is a chronic respiratory condition characterized by airway constriction and inflammation, leading to breathing difficulties. Exposure to certain air pollutants—including ozone, nitrogen dioxide, sulfur dioxide, carbon monoxide, and methane[^1]—can trigger and worsen asthma symptoms. These pollutants interact with bodily tissues and can generate reactive oxygen species, powerful oxidizing agents that damage cells. This damage prompts an inflammatory response, further tightening the airways and making breathing more difficult.^3
+Asthma is a chronic respiratory condition characterized by airway constriction and inflammation, leading to breathing difficulties. Exposure to certain air pollutants—including ozone, nitrogen dioxide, sulfur dioxide, carbon monoxide, and methane[^1]—can trigger and worsen asthma symptoms. These pollutants interact with bodily tissues and can generate reactive oxygen species, powerful oxidizing agents that damage cells. This damage prompts an inflammatory response, further tightening the airways and making breathing more difficult.(“Asthma & Allergy Foundation of America,” n.d.)
 
 In the United States, emissions of these pollutants vary regionally, contributing to differences in asthma rates across the country. The following map illustrates the geographic distribution of asthma prevalence in relation to these airborne pollutants.
 
@@ -26,7 +33,9 @@ Study question : does population density have an effect on asthma rates
 Hypothesis : we Hypothesis that in areas of High population there will be a higher rate of Asthma due to pollution effects 
 
 
+## Methods and Analysis 
 
+Recent asthma data from the CDC was gathered for analysis. Asthma prevalence rates across different states and regions were compared using bar plots. An ANOVA and a Tukey pairwise comparison were then run to test for significant differences. Spatial hotspots were also mapped to identify areas with overlapping patterns of higher asthma rates.
 
 
 ```{r setup and data, include=FALSE}
@@ -244,30 +253,35 @@ summary(r1)
 
 
 ```
-## Analysis 
 
-### 1 
+1 
 Asthma prevalence by region (Figure1) This chart shows us the Median Asthma prevalence with the Highest being the Northeast and the lowest being the south. This helps us to answer our hypothesis because it shows us where the region with a high rate of asthma is so we can test it to see if it correlates with high population density. 
 
-### 2 
+2 
 Population density of the US (Figure2) This chart shows us the Median population density of the different US regions as outlined in (figure3) with the Northeast being the highest and the west being the lowest. This helps us answer our hypothesis because it shows what we were looking for at least in the northeast region that there is a high population density which fits with the higher rate of asthma. 
 
-### 3 
+3 
 Map of the United states with state by state rates of asthma. This map was designed to try and help us to see a trend in the regions and the rates of asthma in each state and how they might correlate with the region which were helpful for understanding the out liar that was New England. This helped to solidify the points that we found in the last two analysis about the correlation we are looking for in the asthma rates and population density. 
 
-### 4 
-Three Anova tests with Tukey-adjusted pairwise function were run to test for the significance of the data that we found. Most all of these P values which we found were high and showed that these correlations were not statistically significant other than in the northeast which showed that asthma prevalence was significantly higher from the other regions with comparison p-values of 0.00419, 0.00558, and  0.02671 for the South, North Central, and West regions respectively. This statistical analysis showed significance in the Northeast showing that the effects are not likely to be from random chance making them significant in our project. howwver these tests did show that in other ares the p values were not under the needed threshold of significance causing us to nullify drawing any conclusions from them in our hypothesis. 
+4 
+Three Anova tests with Tukey-adjusted pairwise function were run to test for the significance of the data that we found. Most all of these P values which we found were high and showed that these correlations were not statistically significant other than in the northeast which showed that asthma prevalence was significantly higher from the other regions with comparison p-values of 0.00419, 0.00558, and  0.02671 for the South, North Central, and West regions respectively. This statistical analysis showed significance in the Northeast showing that the effects are not likely to be from random chance making them significant in our project. however these tests did show that in other ares the p values were not under the needed threshold of significance causing us to nullify drawing any conclusions from them in our hypothesis. 
+
+
+
+# Discussion 
+
+With this data we look forward to a new identifies of these high asthma rates in different regions. due to the limitations on the data that we looked at being only from one year (2024) and not any more specifics we aim in the future to collect and find better data which will show up different factors like Age, Sex or Race to answer this question. Another valuable extension of this project would be to collect county-level asthma prevalence and population density data and analyze their relationship using linear regression to determine whether population density meaningfully predicts asthma rates.
 
 # Conclusion
 
-We overall were not able to conclusively say that the population density is a direct factor in the Asthma rates in a givin area due to these high P values other than in the Northeast which had the highest rate of asthma and the highest population density of 549 per sq mile.
-
-# Discussion 
-With this data and conclusion we look forward to a new identifies of these high asthma rates in diffrent regions. due to the limitations on the data that we looked at being only from one year (2024) and not any more specifics we aim in the future to collect and find better data which will show up diffrent factors like Age, Sex or Race to answer this question. 
+The first overall solid evidence that helps to give strength to our hypothesis is the northeast region which had the highest found population density and the highest rate of asthma. Overall however we were not able to conclusively say that the population density is a direct factor in the Asthma rates. We conclude that more can be done in the future to find a better answer to this question. 
 
 ## Refrences 
 
 1. OpenAI. (2025). ChatGPT (Version 5.1) [Large language model]. https://chat.openai.com/ (used for creation of box plots and troubleshooting)
-2.Centers for Disease Control and Prevention. (2024, November 21). Most recent asthma data. U.S. Department of Health and Human Services. https://www.cdc.gov/asthma-data/about/most-recent-asthma-data.html
+
+2. Centers for Disease Control and Prevention. (2024, November 21). Most recent asthma data. U.S. Department of Health and Human Services. https://www.cdc.gov/asthma-data/about/most-recent-asthma-data.html
+
 3. https://aafa.org/asthma/asthma-triggers-causes/air-pollution-smog-asthma/
+
 

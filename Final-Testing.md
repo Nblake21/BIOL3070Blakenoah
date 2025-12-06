@@ -67,7 +67,7 @@ ggplot(asthma_data, aes(x = region, y = prevalence, fill = region)) +
        theme_minimal()
 ```
 
-<img src="Final_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
+<img src="Final-Testing_files/figure-gfm/box plot-1.png" style="display: block; margin: auto;" />
 Figure 1. Bar plot showing the median Asthma prevalence in each US
 region along with outliars with the south with the lowest prevelance and
 the Northeast at the highest.
@@ -84,7 +84,7 @@ ggplot(asthma_data, aes(x = region, y = pop_density_sqmile, fill = region)) +
   theme_minimal()
 ```
 
-<img src="Final_files/figure-gfm/population density boxplot-1.png" style="display: block; margin: auto;" />
+<img src="Final-Testing_files/figure-gfm/population density boxplot-1.png" style="display: block; margin: auto;" />
 Figure 2. Bar plot showing the asthma prevalence by US region
 
 ``` r
@@ -120,7 +120,7 @@ ggplot(map_data_1, aes(x = long, y = lat, group = group, fill = region.y)) +
   theme_void()
 ```
 
-<img src="Final_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
+<img src="Final-Testing_files/figure-gfm/region map-1.png" style="display: block; margin: auto;" />
 Figure 3. Map showing Regions of the US referenced in previous analysis.
 
 ``` r
@@ -155,7 +155,7 @@ ggplot(map_data_2, aes(long, lat, group = group, fill = prevalence)) +
   )
 ```
 
-<img src="Final_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
+<img src="Final-Testing_files/figure-gfm/prevalence by state-1.png" style="display: block; margin: auto;" />
 Figure 4. Map showing Asthma prevelence on a state by state basis with
 high being darker and lower being lighter.
 
